@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase/models/employee.dart';
 import 'package:firebase/page/addpage.dart';
 import 'package:firebase/page/editpage.dart';
 import 'package:firebase/service/firebase_crud.dart';
+import 'package:flutter/material.dart';
 
 class ListPage extends StatefulWidget {
   @override
@@ -14,8 +14,8 @@ class ListPage extends StatefulWidget {
 
 class _ListPage extends State<ListPage> {
   final Stream<QuerySnapshot> collectionReference = FirebaseCrud.readEmployee();
-  //FirebaeFirestore.instance.collection('Employee').snapshots();
-  @override 
+  //FirebaseFirestore.instance.collection('Employee').snapshots();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -32,10 +32,10 @@ class _ListPage extends State<ListPage> {
               Navigator.pushAndRemoveUntil<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context ) =>AddPage(),
+                  builder: (BuildContext context) => AddPage(),
                 ),
-                (Route) =>
-                  false,
+                (route) =>
+                    false, //if you want to disable back feature set to false
               );
             },
           )
@@ -43,14 +43,14 @@ class _ListPage extends State<ListPage> {
       ),
       body: StreamBuilder(
         stream: collectionReference,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: ListView(
                 children: snapshot.data!.docs.map((e) {
                   return Card(
-                    child: Column(children: [
+                      child: Column(children: [
                     ListTile(
                       title: Text(e["employee_name"]),
                       subtitle: Container(
@@ -58,9 +58,9 @@ class _ListPage extends State<ListPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text("Position: " + e['position'],
-                             style: const TextStyle(fontSize: 14)),
+                                style: const TextStyle(fontSize: 14)),
                             Text("Contact Number: " + e['contact_no'],
-                              style: const TextStyle(fontSize: 12)),
+                                style: const TextStyle(fontSize: 12)),
                           ],
                         )),
                       ),
@@ -78,17 +78,17 @@ class _ListPage extends State<ListPage> {
                           onPressed: () {
                             Navigator.pushAndRemoveUntil<dynamic>(
                               context,
-                              MaterialPageRoute<dynamic> (
+                              MaterialPageRoute<dynamic>(
                                 builder: (BuildContext context) => EditPage(
                                   employee: Employee(
-                                    uid: e.id,
-                                    employeename: e["Employee_name"],
-                                    position: e["position"],
-                                    contactno: e["contact_no"]),
+                                      uid: e.id,
+                                      employeename: e["employee_name"],
+                                      position: e["position"],
+                                      contactno: e["contact_no"]),
                                 ),
                               ),
                               (route) =>
-                                false,
+                                  false, //if you want to disable back feature set to false
                             );
                           },
                         ),
@@ -101,22 +101,22 @@ class _ListPage extends State<ListPage> {
                           child: const Text('Delete'),
                           onPressed: () async {
                             var response =
-                              await FirebaseCrud.deleteEmployee(docId: e.id);
+                                await FirebaseCrud.deleteEmployee(docId: e.id);
                             if (response.code != 200) {
                               showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: 
-                                      Text(response.message.toString()),
-                                  );
-                                });
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      content:
+                                          Text(response.message.toString()),
+                                    );
+                                  });
                             }
                           },
-                        )
+                        ),
                       ],
-                    )
-                    ]));
+                    ),
+                  ]));
                 }).toList(),
               ),
             );
@@ -124,7 +124,7 @@ class _ListPage extends State<ListPage> {
 
           return Container();
         },
-        ),
-      );
+      ),
+    );
   }
 }

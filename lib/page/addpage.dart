@@ -1,79 +1,77 @@
-import 'dart:html';
-
+import 'package:firebase/page/listpage.dart';
 import 'package:firebase/service/firebase_crud.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase/page/listpage.dart';
-
 
 class AddPage extends StatefulWidget {
-  @override 
-  State<StatefulWidget> createState () {
-    // TODO : implement Createstate
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
     return _AddPage();
   }
 }
 
 class _AddPage extends State<AddPage> {
-  final _Employee_name = TextEditingController();
-  final _Employee_position = TextEditingController();
-  final _Employee_contact = TextEditingController();
+  final _employee_name = TextEditingController();
+  final _employee_position = TextEditingController();
+  final _employee_contact = TextEditingController();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     final nameField = TextFormField(
-      controller: _Employee_name,
-      autofocus: false,
-      validator: (value){
-        if (value == null || value.trim().isEmpty) {
-          return 'this field is required';
-        }
-      },
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Name",
-        border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
-    final posilionField = TextFormField (
-      controller: _Employee_position,
-      autofocus: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty){
-          return 'this filed is required';
-        }
-      },
-      decoration: InputDecoration (
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Position",
-        border: 
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
+        controller: _employee_name,
+        autofocus: false,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'This field is required';
+          }
+        },
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: "Name",
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
+    final positionField = TextFormField(
+        controller: _employee_position,
+        autofocus: false,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'This field is required';
+          }
+        },
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: "Position",
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
     final contactField = TextFormField(
-      controller: _Employee_contact,
-      autofocus: false,
-      validator: (value) {
-        if (value == null || value.trim().isEmpty) {
-          return 'This field is required';
-        }
-      },
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Contact Number",
-        border: 
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
+        controller: _employee_contact,
+        autofocus: false,
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'This field is required';
+          }
+        },
+        decoration: InputDecoration(
+            contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            hintText: "Contact Number",
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))));
 
     final viewListbutton = TextButton(
-      onPressed: () {
-        Navigator.pushAndRemoveUntil<dynamic>(
-          context,
-          MaterialPageRoute<dynamic>(
-            builder: (BuildContext context) => ListPage (),
-          ),
-          (route) => false); //To disable back fature set to false
-      },
-      child: const Text('View List of Employee'));
-    
-    final SaveButton = Material(
+        onPressed: () {
+          Navigator.pushAndRemoveUntil<dynamic>(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => ListPage(),
+            ),
+            (route) => false, //To disable back feature set to false
+          );
+        },
+        child: const Text('View List of Employee'));
+
+    final SaveButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Theme.of(context).primaryColor,
@@ -83,25 +81,25 @@ class _AddPage extends State<AddPage> {
         onPressed: () async {
           if (_formKey.currentState!.validate()) {
             var response = await FirebaseCrud.addEmployee(
-              name: _Employee_name.text, 
-              position: _Employee_position.text, 
-              contactno: _Employee_contact.text);
+                name: _employee_name.text,
+                position: _employee_position.text,
+                contactno: _employee_contact.text);
             if (response.code != 200) {
               showDialog(
-                context: context, 
-                builder: (context){
-                  return AlertDialog(
-                    content:  Text(response.message.toString()),
-                  );
-                });
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: Text(response.message.toString()),
+                    );
+                  });
             } else {
               showDialog(
-                context: context, 
-                builder: (context){
-                  return AlertDialog(
-                    content: Text(response.message.toString()),
-                  );
-                });
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      content: Text(response.message.toString()),
+                    );
+                  });
             }
           }
         },
@@ -116,7 +114,7 @@ class _AddPage extends State<AddPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('FreeCode spot'),
+        title: const Text(''),
         backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Column(
@@ -132,16 +130,17 @@ class _AddPage extends State<AddPage> {
                 children: <Widget>[
                   nameField,
                   const SizedBox(height: 25.0),
-                  posilionField,
+                  positionField,
                   const SizedBox(height: 35.0),
                   contactField,
-                  const SizedBox(height: 45.0,),
-                  SaveButton,
+                  viewListbutton,
+                  const SizedBox(height: 45.0),
+                  SaveButon,
                   const SizedBox(height: 15.0),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
